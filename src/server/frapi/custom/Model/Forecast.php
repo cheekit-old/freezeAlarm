@@ -6,8 +6,8 @@ class Forecast {
     private $_lat, $_lon;
 
     public function __construct ($lat, $lon){
-        $this->_lat = $lat;
-        $this->_lon = $lon;
+        $this->_lat = round($lat, 2);
+        $this->_lon = round($lon, 2);
     }
 
     /*
