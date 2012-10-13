@@ -19,7 +19,7 @@
   </configuration>
   <configuration>
    <key>api_url</key>
-   <value>api.frapi</value>
+   <value>freeze.test.cheek-it.com</value>
   </configuration>
   <configuration>
    <key>cache</key>

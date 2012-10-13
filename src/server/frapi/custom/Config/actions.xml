@@ -113,7 +113,7 @@ HEAD: Retrieve the meta information relative to a sibling.&#13;
    <enabled>1</enabled>
    <public>1</public>
    <description>天気予報</description>
-   <route>/forecast</route>
+   <route>/api/forecast</route>
    <hash>9a6ed98cc8f4a6e19dbc903dc6b84990b46f2bd0</hash>
    <parameters>
     <parameter>
