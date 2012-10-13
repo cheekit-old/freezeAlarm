@@ -9,6 +9,7 @@
  * @author Frapi <frapi@getfrapi.com>
  * @link /custom/route/:var
  */
+require_once dirname(__FILE__) . '/../Model/Forecast.php';
 class Action_Forecast extends Frapi_Action implements Frapi_Action_Interface
 {
 
@@ -76,8 +77,17 @@ class Action_Forecast extends Frapi_Action implements Frapi_Action_Interface
         }
         
         $request = $this->toArray();
+        $forecast = new Forecast($request['lat'], $request['lon']);
+        $tomorrow = date("Ymd", strtotime("+1 day"));
 
-        return $request;
+        $temperature = $forecast->retrieveTemperature($tomorrow);
+
+        return array(
+            "forecast"  => $temperature,
+            "meta"      => array(
+                "status" => "true"
+            ),
+        );
     }
 
     /**
