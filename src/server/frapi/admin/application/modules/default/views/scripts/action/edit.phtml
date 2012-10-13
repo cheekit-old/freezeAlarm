@@ -1,0 +1,91 @@
+<?php
+echo $this->form;
+?>
+
+<div class="field-block">
+<?php echo $this->formSubmit('submit', 'Save'); ?>
+</div>
+
+<br /><br />
+<a id="add-param"><?php echo $this->tr->_('ADD_PARAMETER'); ?></a>
+<br /><br />
+<table id="params">
+    <tr>
+        <th style="width: 300px;"><?php echo $this->tr->_('PARAMETER'); ?></th>
+        <th><?php echo $this->tr->_('REQUIRED'); ?> ?</th>
+        <th><?php echo $this->tr->_('ACTION'); ?></th>
+    </tr>
+<?php
+    $i = 1;
+    if (isset($this->data['parameter']) && !empty($this->data['parameter'])) {
+        foreach ($this->data['parameter'] as $dKey => $d) {
+            echo '<tr><td><input type="text" name="param[' . $i . ']" value="' . $d['name'] . '" style="width: 90%;" /></td>';
+            $checked = $d['required'] == '1' ? ' checked="checked"' : '';
+            echo '<td style="text-align: center;"><input type="checkbox" name="required[' . $i . ']"' . $checked . '></td>';
+            echo '<td>';
+            echo '<input type="hidden" name="param_id[' . $i . ']" value="' . $d['name'] . '" />';
+            echo '<a class="delete-button" href="#">' . $this->tr->_('DELETE') . '</a></td></tr>' . "\n";
+            $i++;
+        }
+    }
+?>
+</table>
+
+</form>
+
+<script type="text/javascript" src="/js/ace/build/src/ace.js"></script>
+<script src="/js/ace/build/src/theme-textmate.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/ace/build/src/mode-markdown.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var textarea = $('#description').hide();
+        textarea.after($('<div id="editor" style="position: relative; width: 500px; height: 500px; font-size: 11px; line-height: 1.2em; letter-spacing: 0; background-color: #FFF"></div>'));
+
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/textmate");
+        var MarkdownMode = require("ace/mode/markdown").Mode;
+        editor.getSession().setMode(new MarkdownMode());
+        editor.getSession().setValue(textarea.val());
+        editor.getSession().setUseWrapMode(true);
+        editor.getSession().on('change', function(){
+            textarea.val(editor.getSession().getValue());
+        });
+
+        $('#editor').after($("<p style='margin-left: 185px; margin-top: -1em; font-size: 10px'><em>You may use <a href='http://michelf.com/projects/php-markdown/extra/' target='_blank'>extended markdown</a>.</em></p>"))
+    });
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var i = <?php echo $i; ?>;
+    $('#add-param').click(function () {
+        var html = '<tr><td><input type="text" name="param[' + i + ']" value="" style="width: 90%;" /></td>';
+        html = html + '<td style="text-align: center;"><input type="checkbox" name="required[' + i + ']"></td>';
+        html = html + '<td><a class="delete-button" href="#"><?php echo $this->tr->_('DELETE'); ?></a></td></tr>';
+
+        $('#params').append(html);
+        i++;
+    });
+
+    function deleteButton()
+    {
+        $('a.delete-button').live('click', function () {
+            id = $(this).parent().find('input:hidden').val();
+            $(this).parent().parent().remove();
+
+            if (id == 'undefined') {
+                return false;
+            }
+
+            // Get the ID
+            jQuery.ajax({
+                type: "POST",
+                url: "/action/edit/id/<?php echo $this->id; ?>/param/delete/paramid/" + id,
+                success: function(msg) {}
+            });
+        });
+    }
+
+    deleteButton();
+});
+</script>
