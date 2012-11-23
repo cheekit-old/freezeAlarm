@@ -126,5 +126,31 @@ HEAD: Retrieve the meta information relative to a sibling.&#13;
     </parameter>
    </parameters>
   </action>
+  <action>
+   <name>Notification</name>
+   <enabled>1</enabled>
+   <public>1</public>
+   <description></description>
+   <route>/api/notification</route>
+   <hash>8c356865e02d6581e30b2ed99a81d65f72cd39a4</hash>
+   <parameters>
+    <parameter>
+     <name>device_id</name>
+     <required>1</required>
+    </parameter>
+    <parameter>
+     <name>lat</name>
+     <required>1</required>
+    </parameter>
+    <parameter>
+     <name>lon</name>
+     <required>1</required>
+    </parameter>
+    <parameter>
+     <name>secret</name>
+     <required>1</required>
+    </parameter>
+   </parameters>
+  </action>
  </actions>
 </frapi-config>

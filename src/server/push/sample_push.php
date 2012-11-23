@@ -31,30 +31,31 @@ require_once 'ApnsPHP/Autoload.php';
 // Instanciate a new ApnsPHP_Push object
 $push = new ApnsPHP_Push(
 	ApnsPHP_Abstract::ENVIRONMENT_SANDBOX,
-	'server_cerificates_bundle_sandbox.pem'
+	'cert/PushTestDev.pem'
 );
 
 // Set the Root Certificate Autority to verify the Apple remote peer
-$push->setRootCertificationAuthority('entrust_root_certification_authority.pem');
+$push->setRootCertificationAuthority('cert/erca.pem');
 
 // Connect to the Apple Push Notification Service
 $push->connect();
 
 // Instantiate a new Message with a single recipient
-$message = new ApnsPHP_Message('1e82db91c7ceddd72bf33d74ae052ac9c84a065b35148ac401388843106a7485');
+// $message = new ApnsPHP_Message('1e82db91c7ceddd72bf33d74ae052ac9c84a065b35148ac401388843106a7485');
+$message = new ApnsPHP_Message('PHPE9568F35-D428-11d2-A769-00AA001ACF42');
 
 // Set a custom identifier. To get back this identifier use the getCustomIdentifier() method
 // over a ApnsPHP_Message object retrieved with the getErrors() message.
 $message->setCustomIdentifier("Message-Badge-3");
 
 // Set badge icon to "3"
-$message->setBadge(3);
+//$message->setBadge(3);
 
 // Set a simple welcome text
 $message->setText('Hello APNs-enabled device!');
 
 // Play the default sound
-$message->setSound();
+//$message->setSound();
 
 // Set a custom property
 $message->setCustomProperty('acme2', array('bang', 'whiz'));
