@@ -1,9 +1,21 @@
 // Wait for Cordova to load
 document.addEventListener("deviceready", onDeviceReady, false);
 
+var AppComm = function(){};
+var freezeAlarmMin = 0;
 // Cordova is ready
 function onDeviceReady() {
 	navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    AppComm.prototype.updateValues = function(json) {
+        console.log("Called; alarmConnector")
+        var data = window.JSON.parse(json);
+        pop_up();
+        var alarmText = "明日の最低気温は、" + freezeAlarmMin + "度です";
+        console.log(alarmText);
+        alert(alarmText);
+    };
+
+    window.alarmConnector = new AppComm();
 }
 
 // onSuccess Geolocation
@@ -35,5 +47,6 @@ function pop_up() {
 		var element = document.getElementById('temperature');
   		var min = data.forecast.temperature.min;
 		element.innerHTML = "明日の最低気温は " + min + "℃ です<br>";
+      	freezeAlarmMin = min;
   	});
 }
