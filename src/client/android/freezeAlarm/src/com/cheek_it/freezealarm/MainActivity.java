@@ -28,7 +28,7 @@ public class MainActivity extends DroidGap{
      * Cordova 側の JS関数を呼び出す
      */
     public void pushAlarm() {
-        Log.d("FreezeAlarm", "send phonegap");
+        Log.d("freezeAlarm", "send phonegap");
         /*
         JSONObject data = new JSONObject();
         try {
@@ -42,7 +42,8 @@ public class MainActivity extends DroidGap{
         String js = String.format("window.alarmConnector.('%s');", data.toString());
         */
         
-        String js = "window.alarmConnector.alarm();";
+        
+        String js = "window.alarmConnector.updateValues();";
         this.sendJavascript(js);
     }
 }

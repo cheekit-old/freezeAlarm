@@ -16,16 +16,23 @@
 <div data-role="page">
 	<div data-role="header">
 		<h1>Freeze Alarm</h1>
+		<a href="#dialog" class="ui-btn-right" data-icon="gear" data-role="button" data-inline="true" data-rel="dialog" data-transition="pop">Settings</a>
 	</div>
-	<div data-role="content">
-		<p id="geolocation">現在地取得中...</p>
-		<p id="temperature"></p>
-		<form action="" method="get" class="ui-body ui-body-a ui-corner-all">
-				<fieldset>
-					<button type="button" data-theme="b" onClick="pop_up()">明日の最低気温取得</button>
-				</fieldset>
-			</form>
-	</div>
+</div>
+
+
+<div data-role="dialog" id="dialog">
+	
+	<div data-role="header" data-theme="d" data-position="inline" class="ui-corner-top ui-header ui-bar-d" role="banner"><a href="#" data-icon="delete" data-iconpos="notext" class="ui-btn-left ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-icon-notext" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="d" title="Close"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Close</span><span class="ui-icon ui-icon-delete ui-icon-shadow">&nbsp;</span></span></a>
+		<h1 class="ui-title" role="heading" aria-level="1">ダイアログ</h1>
+	</div><!-- /header -->
+
+	<div data-role="content" data-theme="c" class="ui-corner-bottom ui-content ui-body-c" role="main">	
+			<h2>Schedule Settings</h2> 
+			<p>現在毎日午後9時にお知らせが入ります</p>
+			<a id="schedule_on" href="./" onClick="shedule_on()" data-role="button" data-rel="back" data-theme="b" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" class="ui-btn ui-shadow ui-btn-corner-all ui-btn-up-b"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">ON</span></span></a>       
+			<a id="schedule_off" href="./" onClick="schedule_off()"data-role="button" data-rel="back" data-theme="c" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" class="ui-btn ui-shadow ui-btn-corner-all ui-btn-up-c"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">OFF</span></span></a>    
+	</p></div><!-- /content -->
 </div>
 </body>
 </html>
