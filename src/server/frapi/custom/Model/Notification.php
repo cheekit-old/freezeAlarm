@@ -1,8 +1,7 @@
 <?php
 # Zend 自動読み込み
-set_include_path(get_include_path() . PATH_SEPARATOR . '../../Library');
-set_include_path(get_include_path() . PATH_SEPARATOR . '../Library');
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__) . '/../../Library');
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__) . '/../Library');
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__) . '/../../library');
 require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->unregisterNamespace(array('Zend_', 'ZendX_'))
