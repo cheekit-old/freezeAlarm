@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ti:app xmlns:ti="http://ti.appcelerator.org">
+    <property name="acs-oauth-secret-production" type="string">3d2e6HmqCc60BFX6NVM2O5rhRchP2Xu7</property>
+    <property name="acs-oauth-key-production" type="string">KLEeeNv3BBoW8jYa7430N2igGFvp0R5w</property>
+    <property name="acs-api-key-production" type="string">p66JaEN82iDwCP33edMx6NtDIWhcoMTc</property>
+    <property name="acs-oauth-secret-development" type="string">U4yZ2JqLlSOALun6EfqBM6TX1MfHPtDC</property>
+    <property name="acs-oauth-key-development" type="string">ofWSBB9zRceFchF62v3XUeEXIKvTpJ1b</property>
+    <property name="acs-api-key-development" type="string">DYbnUVmPcLIPg8av5e8eDXVfuG7in5pL</property>
+    <deployment-targets>
+        <target device="mobileweb">false</target>
+        <target device="iphone">true</target>
+        <target device="ipad">true</target>
+        <target device="android">true</target>
+        <target device="blackberry">false</target>
+    </deployment-targets>
+    <sdk-version>2.1.4.GA</sdk-version>
+    <id>com.cheek_it.freezeAlarm</id>
+    <name>freezeAlarm</name>
+    <version>1.0</version>
+    <publisher>issei</publisher>
+    <url>http://cheek-it.com</url>
+    <description>not specified</description>
+    <copyright>2012 by issei</copyright>
+    <icon>appicon.png</icon>
+    <persistent-wifi>false</persistent-wifi>
+    <prerendered-icon>false</prerendered-icon>
+    <statusbar-style>default</statusbar-style>
+    <statusbar-hidden>false</statusbar-hidden>
+    <fullscreen>false</fullscreen>
+    <navbar-hidden>false</navbar-hidden>
+    <analytics>true</analytics>
+    <guid>5133d400-8dd0-42d8-901b-405fa58ffe41</guid>
+    <property name="ti.ui.defaultunit">system</property>
+    <iphone>
+        <orientations device="iphone">
+            <orientation>Ti.UI.PORTRAIT</orientation>
+        </orientations>
+        <orientations device="ipad">
+            <orientation>Ti.UI.PORTRAIT</orientation>
+            <orientation>Ti.UI.UPSIDE_PORTRAIT</orientation>
+            <orientation>Ti.UI.LANDSCAPE_LEFT</orientation>
+            <orientation>Ti.UI.LANDSCAPE_RIGHT</orientation>
+        </orientations>
+    </iphone>
+    <android xmlns:android="http://schemas.android.com/apk/res/android"/>
+    <mobileweb>
+        <precache/>
+        <splash>
+            <enabled>true</enabled>
+            <inline-css-images>true</inline-css-images>
+        </splash>
+        <theme>default</theme>
+    </mobileweb>
+    <modules>
+        <module platform="commonjs" version="2.3.0">ti.cloud</module>
+    </modules>
+</ti:app>
