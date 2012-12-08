@@ -51,7 +51,7 @@ class Notification{
     public function save (){
 
         $sql = <<<SQL
-INSERT INTO notifications
+INSERT INTO Notifications
 (
       device_id
     , lat
