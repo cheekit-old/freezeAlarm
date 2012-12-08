@@ -5,6 +5,54 @@ Titanium.UI.setBackgroundColor('#000');
 var tabGroup = Titanium.UI.createTabGroup();
 
 
+function getForecast() {
+	// オフラインなら処理しないようにしたほうがいいですよね！
+	if(Titanium.Network.online == false){
+	    // エラー表示
+	    return;
+	}
+	
+	// オブジェクトを生成します。
+	var xhr = Titanium.Network.createHTTPClient();
+	
+	// 第一引数はHTTP Method(GETかPOSTがほとんどだと思いますが)
+	// 第二引数はURIです。
+	xhr.open('GET','http://freeze.test.cheek-it.com/api/forecast.json?lat=41.123&lon=141');
+	
+	// レスポンスを受け取るイベント
+	xhr.onload = function(){
+	    alert( json = eval('(' + this.responseText + ')') );
+	    /*
+	    // これと同義
+	    xhr.onreadystatechange = function(){
+	        if(this.readyState == xhr.DONE){
+	            alert(this.responseText);
+	        }
+	    };
+	    */
+	};
+	
+	// エラー発生時のイベント
+	xhr.onerror = function(error){
+	    // errorにはエラー事由の文字列オブジェクトが入ってくる。
+	};
+	
+	// リクエスト送信します。(引数としてJSON値を入れるとパラメータ化される)
+	xhr.send();
+	/*
+	 xhr.send({
+	     q : 'querystring',
+	     param_name : 'param_value'
+	 });
+	 */
+}
+
+
+
+
+
+
+
 //
 // create base UI tab and root window
 //
@@ -50,8 +98,6 @@ var label2 = Titanium.UI.createLabel({
 });
 
 win2.add(label2);
-
-
 
 //
 //  add tabs
