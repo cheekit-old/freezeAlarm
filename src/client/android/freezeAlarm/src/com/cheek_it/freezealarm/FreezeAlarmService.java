@@ -30,14 +30,14 @@ public class FreezeAlarmService extends Service {
 	    // 将来的にはユーザが自由に設定できるようにする
 	    Calendar cal = Calendar.getInstance();
 	    //cal.setTimeInMillis(System.currentTimeMillis());
-	    cal.set(Calendar.HOUR_OF_DAY, 22);
-	    cal.set(Calendar.MINUTE, 49);
+	    cal.set(Calendar.HOUR_OF_DAY, 3);
+	    cal.set(Calendar.MINUTE, 1);
 	    cal.set(Calendar.SECOND, 0);
 	    Log.d("freezeAlarm", "" + cal.getTimeInMillis());
 
 	    // 1日ごとに起動
 	    long interval = AlarmManager.INTERVAL_DAY;
-	    //interval = 12000;
+	    interval = 12000;
 	    this.alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), interval, sender);
 
 	    Log.d("freezeAlram", "Set alarmmanager");

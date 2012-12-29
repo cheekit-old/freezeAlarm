@@ -17,8 +17,8 @@ apiMapper.forecastApi(
 	function(){
 		// 成功したとき
 		 var json = eval('(' + this.responseText + ')');
-		 alert(json.forecast.date);
-		 label1.text = json.forecast.date;	// label1 のテキストを変更する場合
+		 alert(json.forecast.temperature.min); // 最低気温をalert表示
+		 label1.text = json.forecast.date;	// label1 のテキストを日付に変更する場合
 	},
 	function(){
 		// 失敗したとき

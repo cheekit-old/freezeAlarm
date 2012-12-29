@@ -42,7 +42,6 @@ public class MainActivity extends DroidGap{
         String js = String.format("window.alarmConnector.('%s');", data.toString());
         */
         
-        
         String js = "window.alarmConnector.updateValues();";
         this.sendJavascript(js);
     }

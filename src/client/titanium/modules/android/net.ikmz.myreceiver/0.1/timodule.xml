@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ti:module xmlns:ti="http://ti.appcelerator.org" xmlns:android="http://schemas.android.com/apk/res/android">
+	<!--
+		Similar to tiapp.xml, but contains module/platform specific
+		configuration in <iphone>, <android>, and <mobileweb> sections
+	-->
+	<iphone>
+	</iphone>
+	<android xmlns:android="http://schemas.android.com/apk/res/android">
+		<manifest>
+	    	<application>
+				<receiver android:name="net.ikmz.myreceiver.CheekBroadcastReceiver">
+				    <intent-filter>
+				        <action android:name="android.intent.action.BOOT_COMPLETED" />
+				        <category android:name="android.intent.category.DEFAULT" />
+				    </intent-filter>
+				</receiver>
+				<service android:name="com.cheek_it.freezeAlarm.Lib_NotificationServiceService">
+				    <intent-filter>
+				        <action android:name="com.cheek_it.freezeAlarm.Lib_NotificationServiceService" />
+				    </intent-filter>
+				</service>
+			</application>
+			<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" android:protectionLevel="signature" />
+		</manifest>
+	</android>
+	<mobileweb>
+	</mobileweb>
+</ti:module>

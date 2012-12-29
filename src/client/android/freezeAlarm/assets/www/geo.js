@@ -3,6 +3,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 var AppComm = function(){};
 var freezeAlarmMin = 0;
+var location_name = "";
 
 // Cordova is ready
 function onDeviceReady() {
@@ -61,7 +62,9 @@ function pop_up() {
 	  		message = location_name + "の明日の最低気温は " + min + "℃ です。水道管の破裂に注意してください";
   		} else if (min < 10){
   			message = location_name + "の明日の最低気温は " + min + "℃ です。きをつけてね";
-  		}
+      		navigator.app.exitApp();
+      		return;
+  		} 
   		navigator.notification.alert(message, callbackDissmiss, "Warning", "OK");
 		navigator.notification.vibrate(1000);
 		navigator.notification.beep(3);
