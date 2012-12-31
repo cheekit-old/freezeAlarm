@@ -3,36 +3,45 @@
  * 
  * 1時間おきに起動し，20時にアラームする
  */
+
+// ApiMapper ロード
 var ApiMapper = require("lib/apiMapper").ApiMapper;
+
+// 時刻
+var date = new Date();
+var hour = date.getHours();
+
+// interval 取得
 var service = Titanium.Android.currentService;
 var interval = service.intent.getIntExtra('interval', 0);
 
-Ti.API.log('Notification Service: interval=' + interval);
+Ti.API.log('Starting Notification Service: interval=' + interval + ' hour=' + hour);
 
-var date = new Date();
-var hour = date.getHours();
 if(interval == 0){
-	// moduleからの起動のときは 1 時間間隔の起動に変更
-	Ti.API.log('Boot from module');
+	// インターバルなし（from module)起動のときは 1 時間間隔の起動に変更
+	Ti.API.log('Setting boot service (hourly)');
 	var intent = Titanium.Android.createServiceIntent({url:'lib/NotificationService.js'});
 	intent.putExtra('interval', 3600000);
-	var service = Titanium.Android.createService(intent);
-	service.start();
-}else if(hour % 3 == 0){
+//	intent.putExtra('interval', 10000);
+	var newService = Titanium.Android.createService(intent);
+	newService.initialized = true;
+	newService.start();
+}else if(hour == 19){		// TODO : リリース時は hour == 19 とする
+//}else if(hour == 20){		// TODO : リリース時は hour == 19 とする
+//}else{
 	// interval による起動
-	Ti.API.log(date.getHours());
+	Ti.API.log('Boot by interval');
 	
-	Ti.API.log('get location from GPS');
-	
-	/**
-	 * 通知領域
-	 */
+	// 通知領域	TODO : 設定変更
 	var intent = Ti.Android.createIntent({
-		action: Ti.Android.ACTION_VIEW, 
-	    data: "http://example.com"
+		className: 'ti.modules.titanium.ui.TiTabActivity',
+		packageName: 'com.cheek_it.freezealarm',
+		flags: Titanium.Android.FLAG_ACTIVITY_CLEAR_TOP | Titanium.Android.FLAG_ACTIVITY_SINGLE_TOP
 	});
 	var pending = Ti.Android.createPendingIntent({ 
-		'intent' : intent,
+		activity: 'com.cheek_it.freezealarm.FreezealarmActivity',
+		type: Titanium.Android.PENDING_INTENT_FOR_ACTIVITY,
+		intent: intent,
 	});
 	
 	// 現在位置取得
@@ -42,6 +51,16 @@ if(interval == 0){
 	Ti.Geolocation.getCurrentPosition(function(e){
 		if ( ! e.success || e.error){
 			Ti.API.error(e.error);
+			var notification = Ti.Android.createNotification({
+					contentIntent : pending,
+					contentTitle: 'Freeze Alarm',
+					contentText:  '天気予報の取得に失敗しました',
+					tickerText : '天気予報の取得に失敗しました',
+			});
+			
+			// 通知領域へ表示
+			// TODO: プロパティどうつかうか調べる https://developer.appcelerator.com/apidoc/mobile/1.7.2/Titanium.Android.NotificationManager-module
+			Ti.Android.NotificationManager.notify(1, notification);
 			return;
 		}
 		
@@ -60,19 +79,52 @@ if(interval == 0){
 				var json = eval('(' + this.responseText + ')');
 				min = json.forecast.temperature.min;
 				Ti.API.log('MIN: ' + min);
+				
+				var title = '';
+				var text = '';
+				var tickerText = '';
+				if(min <= -4){
+					title = '【警告】Freeze Alarm';
+					text = '【警告】翌朝の最低気温は ' + min + ' 度です．水道管凍結対策をしてください．';
+					tickerText = text;
+				}else if (min <= 0){
+					title = '【注意】Freeze Alarm';
+					text = '【注意】翌朝の最低気温は ' + min + ' 度です．水道管凍結には注意してください．';
+					tickerText = text;
+				}else{
+					// 0 度より高いときは Notification しない
+					return;
+				}
+				
 				var notification = Ti.Android.createNotification({
 						contentIntent : pending,
-						contentTitle: 'Freeze',
-						contentText:  '翌朝の最低気温は ' + min + '度',
-						tickerText : 'FreezeAlarm Ticker'
+						contentTitle: title,
+						contentText:  text,
+						tickerText : tickerText,
 				});
+				
+				// 通知領域へ表示
+				// TODO: プロパティどうつかうか調べる https://developer.appcelerator.com/apidoc/mobile/1.7.2/Titanium.Android.NotificationManager-module
 				Ti.Android.NotificationManager.notify(1, notification);
-				Titanium.Media.vibrate();
+				Titanium.Media.vibrate();		// 振動させる TODO: パターン変更
 			},
 			function(){
 				// 失敗したとき
 				Ti.API.error('天気予報の取得に失敗しました');
+				var notification = Ti.Android.createNotification({
+						contentIntent : pending,
+						contentTitle: 'Freeze Alarm',
+						contentText:  '天気予報の取得に失敗しました',
+						tickerText : '天気予報の取得に失敗しました',
+				});
+				
+				// 通知領域へ表示
+				// TODO: プロパティどうつかうか調べる https://developer.appcelerator.com/apidoc/mobile/1.7.2/Titanium.Android.NotificationManager-module
+				Ti.Android.NotificationManager.notify(1, notification);
 			}
 		);
 	});
 }
+
+// サービス起動フラグ
+service.initialized = true;

@@ -82,31 +82,31 @@ var getLocation = function(e) {
 	
 	// 位置情報取得
 	if(!Ti.Geolocation.locationServicesEnabled){
-		alert('GPSを有効にしてください');
+		alert('GPSを有効にしてください [' + e.error + ']');
+		return;
+	}
+	
+	if(e.error){
+		alert(e.error);
 		return;
 	}
 	
 	try {
-		Ti.Geolocation.getCurrentPosition(function(e){
-			// エラー時はコールバック関数の引数のerrorプロパティがセットされる
-			if ( ! e.success || e.error){
-				alert(e.error);
-				return;
-			}
-			
-			// 位置情報処理
-			gpslon = e.coords.longitude;
-			gpslat = e.coords.latitude;
-			
-			
-			Ti.Geolocation.reverseGeocoder(gpslat, gpslon, function(e){
-				if(!(e.places && e.places.length)) {
-					// 取得できなかったとき
-					alert('地名を取得できませんでした');
-				}
-				
-				var address = e.places[0].displayAddress.split(',');
-				var pref = address[address.length - 2].replace(/\(.*\)/,'');		// 海外対応: とりあえず国の次の位置をprefとする
+		// 位置情報処理
+		gpslon = e.coords.longitude;
+		gpslat = e.coords.latitude;
+		
+		Ti.Geolocation.reverseGeocoder(gpslat, gpslon, function(e){
+			var address = new Array();
+			var pref = '地域不明';
+			var city = '';
+			if(!(e.places && e.places.length)) {
+				// 取得できなかったとき
+				alert('地名を取得できませんでした．');
+			}else{
+				// 取得できたとき: 住所表示設定
+				address = e.places[0].displayAddress.split(',');
+				pref = address[address.length - 2].replace(/\(.*\)/,'');		// 海外対応: とりあえず国の次の位置をprefとする
 				for (var i = address.length - 1; i > 0; i--){
 					// (都|道|府|県) が含まれるとき都道府県と判定する TODO: ださい
 					if(address[i].match(/(都|道|府|県)/)){
@@ -114,69 +114,71 @@ var getLocation = function(e) {
 					}
 				}
 				Ti.API.log(e.places[0]);
-				var city = e.places[0].city.replace(/\(.*\)/,'');
-				
-				/*
-				 * UI 処理
-				 */
-				prefLabel.text = pref;
-				var wardFontSize = (city.length < 5) ? '72dp' : '40dp';	 // 長い名前のときは文字サイズを小さくする
-				wardLabel.font = {fontSize: wardFontSize};
-				wardLabel.text = city;
-				
-				
-				/**
-				 * 最低気温
-				 */
-				var apiMapper = new ApiMapper();
-				
-				apiMapper.forecastApi(
-					gpslat,		// 緯度
-					gpslon,		// 経度
-					function(){
-						// 成功したとき
-						 var json = eval('(' + this.responseText + ')');
-						 temparatureLabel.text = (json.forecast.temperature.min) + "℃"; // 最低気温をalert表示
-					},
-					function(){
-						// 失敗したとき
-						alert('天気予報の取得に失敗しました');
-					}
-				);
-				
-				
-				// 再取得ボタン
-				var reloadButton = Ti.UI.createButton({
-					title: '現在地の最低気温を取得',
-					color: '#000',
-				//	backgroundColor: '#77BBDD',
-					height: 'auto',
-					width: '90%',
-				    bottom: '10dp',
-				});
-				reloadButton.addEventListener('click', getLocation);
-				
-				progressBar.value = 3;
-				// 非表示: TODO: あまりよくない
-				freezeWindow.remove(progressBar);
-				freezeWindow.remove(loadingLabel);
-				freezeWindow.remove(appnameLabel);
-				freezeWindow.remove(prefLabel);
-				freezeWindow.remove(wardLabel);
-				freezeWindow.remove(dateLabel);
-				freezeWindow.remove(temparatureLabel);
-				freezeWindow.remove(reloadButton);
-				
-				// 表示
-				freezeWindow.add(prefLabel);
-				freezeWindow.add(wardLabel);
-				freezeWindow.add(dateLabel);
-				freezeWindow.add(temparatureLabel);
-				freezeWindow.add(reloadButton);
-				
+				city = e.places[0].city.replace(/\(.*\)/,'');
+			}
+			
+			/*
+			 * UI 処理
+			 */
+			prefLabel.text = pref;
+			var wardFontSize = (city.length < 5) ? '72dp' : '40dp';	 // 長い名前のときは文字サイズを小さくする
+			wardLabel.font = {fontSize: wardFontSize};
+			wardLabel.text = city;
+			
+			/**
+			 * 最低気温
+			 */
+			var apiMapper = new ApiMapper();
+			
+			apiMapper.forecastApi(
+				gpslat,		// 緯度
+				gpslon,		// 経度
+				function(){
+					// 成功したとき
+					 var json = eval('(' + this.responseText + ')');
+					 temparatureLabel.text = (json.forecast.temperature.min) + "℃"; // 最低気温をalert表示
+				},
+				function(){
+					// 失敗したとき
+					alert('天気予報の取得に失敗しました．ご迷惑をおかけいたしますが，通信状態のよい環境で再度お試しください．');
+				}
+			);
+			
+			// 再取得ボタン
+			var reloadButton = Ti.UI.createButton({
+				title: '現在地の最低気温を取得',
+				color: '#000',
+			//	backgroundColor: '#77BBDD',
+				height: 'auto',
+				width: '90%',
+			    bottom: '10dp',
+			});
+			reloadButton.addEventListener('click', function(e){
+				Titanium.Geolocation.addEventListener( 'location', getLocation ); 
 			});
 			
+			progressBar.value = 3;
+			// 非表示: TODO: あまりよくない
+			freezeWindow.remove(progressBar);
+			freezeWindow.remove(loadingLabel);
+			freezeWindow.remove(appnameLabel);
+			freezeWindow.remove(prefLabel);
+			freezeWindow.remove(wardLabel);
+			freezeWindow.remove(dateLabel);
+			freezeWindow.remove(temparatureLabel);
+			freezeWindow.remove(reloadButton);
+			
+			// 表示
+			freezeWindow.add(prefLabel);
+			freezeWindow.add(wardLabel);
+			freezeWindow.add(dateLabel);
+			freezeWindow.add(temparatureLabel);
+			freezeWindow.add(reloadButton);
+			
+			
 		});
+		
+		Titanium.Geolocation.removeEventListener( 'location', getLocation ); 
 	} catch (e) {
 		Ti.API.log('Cannot retrieve GPS infomation');
 		Ti.API.log(e);
@@ -207,26 +209,24 @@ var progressBar = Ti.UI.createProgressBar({
 
 var loadingLabel = Ti.UI.createLabel({
 	text: '位置情報取得中',
-    width:'auto',
+	width: '100%',
     shadowColor:'#aaa',
     shadowOffset:{x:5,y:5},
     color:'#000',
     font:{fontSize:'28dp'},
 	textAlign:'center',
-	width: '100%',
     top:'175dp',
 });
 
 
 var appnameLabel = Ti.UI.createLabel({
 	text: 'Freeze Alarm',
-    width:'auto',
+	width: '100%',
     shadowColor:'#aaa',
     shadowOffset:{x:5,y:5},
     color:'#000',
     font:{fontSize:'48dp'},
 	textAlign:'center',
-	width: '100%',
     top:'10dp',
 });
 
@@ -371,3 +371,18 @@ Ti.Geolocation.distanceFilter = 10;
 Ti.Geolocation.accuracy = Ti.Geolocation.ACCURACY_THREE_KILOMETERS;
 
 Titanium.Geolocation.addEventListener( 'location', getLocation ); 
+
+/**
+ * サービス
+ */
+var serviceIntent = Ti.Android.createServiceIntent( { url:  'lib/NotificationService.js' } );
+if(Ti.Android.isServiceRunning(serviceIntent)){
+	Ti.API.info('service is running');
+}else{
+	Ti.API.info('service is not running');
+	serviceIntent.putExtra('interval', 3600000);
+	var service = Titanium.Android.createService(serviceIntent);
+	service.initialized = true;
+	service.start();
+}
+

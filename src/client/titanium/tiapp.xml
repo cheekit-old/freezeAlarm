@@ -14,13 +14,13 @@
         <target device="blackberry">false</target>
     </deployment-targets>
     <sdk-version>2.1.4.GA</sdk-version>
-    <id>com.cheek_it.freezeAlarm</id>
-    <name>freezeAlarm</name>
-    <version>1.0</version>
-    <publisher>issei</publisher>
+    <id>com.cheek_it.freezealarm</id>
+    <name>FreezeAlarm</name>
+    <version>2.0</version>
+    <publisher>Cheekit</publisher>
     <url>http://cheek-it.com</url>
-    <description>not specified</description>
-    <copyright>2012 by issei</copyright>
+    <description>水道管凍結でお悩みの地域に住んでいる方には必須のアプリが誕生しました！Freeze Alarm は、水道管凍結に悩まされない世界を実現するために開発されたアプリです。</description>
+    <copyright>2012 by Cheekit</copyright>
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
@@ -42,16 +42,22 @@
             <orientation>Ti.UI.LANDSCAPE_RIGHT</orientation>
         </orientations>
     </iphone>
-	<android xmlns:android="http://schemas.android.com/apk/res/android">
-		<services>
-		    <service type="interval" url="lib/NotificationService.js" />
-		</services>
-		<manifest>
-			 <uses-permission  android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-			 <uses-permission  android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-			 <uses-permission  android:name="android.permission.ACCESS_MOCK_LOCATION"></uses-permission>
-		</manifest>
-		<!--
+    <android xmlns:android="http://schemas.android.com/apk/res/android">
+        <services>
+            <service type="interval" url="lib/NotificationService.js"/>
+        </services>
+        <receiver android:name="com.cheek_it.freezealarm/.FreezealarmActivity">
+            <intent-filter>
+                <action android:name="com.cheek_it.freezealarm/.FreezealarmActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
+        <manifest android:versionCode="2" android:versionName="2.0.0" android:installLocation="auto">
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+            <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
+        </manifest>
+        <!--
 		<manifest>
 	    	<application>
 				<receiver android:name="net.ikmz.myreceiver.CheekBroadcastReceiver">
@@ -64,7 +70,7 @@
 			<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" android:protectionLevel="signature" />
 		</manifest>
 		-->
-	</android>
+    </android>
     <mobileweb>
         <precache/>
         <splash>

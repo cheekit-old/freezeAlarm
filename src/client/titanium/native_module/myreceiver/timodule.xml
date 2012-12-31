@@ -12,12 +12,20 @@
 				<receiver android:name="net.ikmz.myreceiver.CheekBroadcastReceiver">
 				    <intent-filter>
 				        <action android:name="android.intent.action.BOOT_COMPLETED" />
+				        <action android:name="com.android.vending.INSTALL_REFERRER"/>
+		                <action android:name="android.intent.action.PACKAGE_ADDED" />
+				        <action android:name="android.intent.action.PACKAGE_CHANGED" />
+				        <action android:name="android.intent.action.PACKAGE_DATA_CLEARED" />
+				        <action android:name="android.intent.action.PACKAGE_INSTALL" />
+				        <action android:name="android.intent.action.PACKAGE_REMOVED" />
+				        <action android:name="android.intent.action.PACKAGE_REPLACED" />
+				        <action android:name="android.intent.action.PACKAGE_RESTARTED" />
 				        <category android:name="android.intent.category.DEFAULT" />
 				    </intent-filter>
 				</receiver>
-				<service android:name="com.cheek_it.freezeAlarm.Lib_NotificationServiceService">
+				<service android:name="com.cheek_it.freezealarm.Lib_NotificationServiceService">
 				    <intent-filter>
-				        <action android:name="com.cheek_it.freezeAlarm.Lib_NotificationServiceService" />
+				        <action android:name="com.cheek_it.freezealarm.Lib_NotificationServiceService" />
 				    </intent-filter>
 				</service>
 			</application>
