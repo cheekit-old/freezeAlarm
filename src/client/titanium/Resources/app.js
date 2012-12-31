@@ -81,6 +81,7 @@ var getLocation = function(e) {
 	progressBar.value = 2;
 	
 	// 位置情報取得
+	Ti.Geolocation.purpose = "Recieve User Location";
 	if(!Ti.Geolocation.locationServicesEnabled){
 		alert('GPSを有効にしてください [' + e.error + ']');
 		return;
@@ -95,6 +96,7 @@ var getLocation = function(e) {
 		// 位置情報処理
 		gpslon = e.coords.longitude;
 		gpslat = e.coords.latitude;
+		Ti.API.log('GPS Info: ' + gpslat + ',' + gpslon);
 		
 		Ti.Geolocation.reverseGeocoder(gpslat, gpslon, function(e){
 			var address = new Array();
@@ -105,7 +107,9 @@ var getLocation = function(e) {
 				alert('地名を取得できませんでした．');
 			}else{
 				// 取得できたとき: 住所表示設定
-				address = e.places[0].displayAddress.split(',');
+				Ti.API.log(e.places);
+				// address = e.places[0].displayAddress.split(',');
+				address = e.places[0].address.split(',');
 				pref = address[address.length - 2].replace(/\(.*\)/,'');		// 海外対応: とりあえず国の次の位置をprefとする
 				for (var i = address.length - 1; i > 0; i--){
 					// (都|道|府|県) が含まれるとき都道府県と判定する TODO: ださい
@@ -143,6 +147,55 @@ var getLocation = function(e) {
 					alert('天気予報の取得に失敗しました．ご迷惑をおかけいたしますが，通信状態のよい環境で再度お試しください．');
 				}
 			);
+			
+			// Notification を登録する（iOSのみ）
+			if((Ti.Platform.osname=="iphone")||(Ti.Platform.osname=="ipad")){
+				
+				// deviceToken取得
+				Ti.API.info('Trying to register push and get deviceToken');
+				Titanium.Network.registerForPushNotifications({
+					types: [
+						Titanium.Network.NOTIFICATION_TYPE_BADGE,
+						Titanium.Network.NOTIFICATION_TYPE_ALERT,
+						Titanium.Network.NOTIFICATION_TYPE_SOUND
+					],
+					success:function(e)
+					{
+						Ti.API.info('Completed to get deviceToken: ' + e.deviceToken);
+						var deviceToken = e.deviceToken;
+						
+						// API登録
+						apiMapper.notificationApi(
+							deviceToken,	// device_id
+							gpslat,		// 緯度
+							gpslon,	// 経度
+							function(){
+								// 成功したとき
+								 var json = eval('(' + this.responseText + ')');
+								 Ti.API.info(this.responseText);
+							},
+							function(){
+								// 失敗したとき
+								alert('通知の設定に失敗しました');
+							}
+						);
+					},
+					error:function(e)
+					{
+						Ti.API.error('Failed to get deviceToken: ' + e.error);
+					},
+					callback:function(e)
+					{
+						// called when a push notification is received.
+						var obj = JSON.parse(JSON.stringify(e.data));
+						Ti.API.log(e.data);
+						// alert("Received a push notification\n\nPayload:\n\n"+JSON.stringify(e.data));
+						// var jsontext = eval('(' + JSON.stringify(e.data) + ')');
+						// alert("Received a push notification:\n"+ jsontext.forecast.aps.alert);
+					}
+				});
+				
+			}
 			
 			// 再取得ボタン
 			var reloadButton = Ti.UI.createButton({
@@ -375,14 +428,16 @@ Titanium.Geolocation.addEventListener( 'location', getLocation );
 /**
  * サービス
  */
-var serviceIntent = Ti.Android.createServiceIntent( { url:  'lib/NotificationService.js' } );
-if(Ti.Android.isServiceRunning(serviceIntent)){
-	Ti.API.info('service is running');
-}else{
-	Ti.API.info('service is not running');
-	serviceIntent.putExtra('interval', 3600000);
-	var service = Titanium.Android.createService(serviceIntent);
-	service.initialized = true;
-	service.start();
+if(Ti.Platform.osname=="android"){
+	// Android
+	var serviceIntent = Ti.Android.createServiceIntent( { url:  'lib/NotificationService.js' } );
+	if(Ti.Android.isServiceRunning(serviceIntent)){
+		Ti.API.info('service is running');
+	}else{
+		Ti.API.info('service is not running');
+		serviceIntent.putExtra('interval', 3600000);
+		var service = Titanium.Android.createService(serviceIntent);
+		service.initialized = true;
+		service.start();
+	}
 }
-

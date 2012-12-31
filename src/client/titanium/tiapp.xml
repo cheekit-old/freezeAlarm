@@ -84,6 +84,6 @@
         <!--
         <module version="0.1">com.cheek_it.module.cheekreceiver</module>
         -->
-        <module version="0.1">net.ikmz.myreceiver</module>
+        <module platform="android" version="0.1">net.ikmz.myreceiver</module>
     </modules>
 </ti:app>
