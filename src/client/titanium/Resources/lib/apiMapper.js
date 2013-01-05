@@ -65,7 +65,7 @@ apiMapper.accessApi(
 */
 
 ApiMapper = function(){};
-ApiMapper.prototype.apiEndpoint = "http://freeze.test.cheek-it.com/api";
+ApiMapper.prototype.apiEndpoint = "http://freeze.cheek-it.com/api";
 ApiMapper.prototype.accessApi = function(method, uri, param, callback_success, callback_failure) {
 
 		// オフラインなら失敗
