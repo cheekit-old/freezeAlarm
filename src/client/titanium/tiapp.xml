@@ -16,10 +16,10 @@
     <sdk-version>2.1.4.GA</sdk-version>
     <id>com.cheek_it.freezealarm</id>
     <name>FreezeAlarm</name>
-    <version>2.0</version>
+    <version>2.0.1</version>
     <publisher>Cheekit</publisher>
     <url>http://cheek-it.com</url>
-    <description>水道管凍結でお悩みの地域に住んでいる方には必須のアプリが誕生しました！Freeze Alarm は、水道管凍結に悩まされない世界を実現するために開発されたアプリです。</description>
+    <description>水道管凍結でお悩みの地域に住んでいる方には必須のアプリが誕生しました！FreezeAlarm は、水道管凍結に悩まされない世界を実現するために開発されたアプリです。</description>
     <copyright>2012 by Cheekit</copyright>
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
@@ -52,7 +52,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </receiver>
-        <manifest android:versionCode="2" android:versionName="2.0.0" android:installLocation="auto">
+        <manifest android:versionCode="3" android:versionName="2.0.1" android:installLocation="auto">
             <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
             <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
             <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
