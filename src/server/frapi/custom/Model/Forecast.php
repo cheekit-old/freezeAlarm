@@ -25,7 +25,7 @@ class Forecast {
         $query_array = array(
             'q'             => $this->_getPairLatLon(),
             'format'        => 'xml',
-            'num_of_days'   => 2,
+            'num_of_days'   => 3,
             'key'          => $this->_getApiKey()
         );
 
