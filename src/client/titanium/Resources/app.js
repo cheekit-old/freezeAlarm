@@ -1,6 +1,8 @@
 // this sets the background color of the master UIView (when there are no windows/tab groups on it)
 var ApiMapper = require("lib/apiMapper").ApiMapper;
-Titanium.UI.setBackgroundColor('#99DDFF');
+Titanium.UI.setBackgroundColor('#95BEEA');
+// Titanium.UI.currentWindow.barColor = "#CBDFF4";
+// Titanium.UI.currentWindow.translucent = true;
 
 // タブグループの生成
 var tabGroup = Titanium.UI.createTabGroup();
@@ -9,9 +11,18 @@ var tabGroup = Titanium.UI.createTabGroup();
  * freeze : 現在位置の凍結情報表示 Tab の設定
  */
 var freezeWindow = Titanium.UI.createWindow({  
-    title:'凍結情報',
-    backgroundColor:'#99DDFF'
+  	backgroundGradient:{
+	    type: 'linear',
+		startPoint: { x: '50%', y: '0%' },
+		endPoint: { x: '50%', y: '100%' },
+		colors: [
+		  { color: '#CBDFF4', offset: 0.0},
+		  { color: '#95BEEA', offset: 0.5},
+		  { color: '#5D9DDD', offset: 1.0 }
+		]
+	}
 });
+freezeWindow.hideNavBar();
 
 var freezeTab = Titanium.UI.createTab({  
     icon:'KS_nav_views.png',
@@ -21,9 +32,8 @@ var freezeTab = Titanium.UI.createTab({
 
 var prefLabel = Ti.UI.createLabel({
     width:'100%',
-    shadowColor:'#aaa',
     shadowOffset:{x:5,y:5},
-    color:'#000',
+    color:'#FFF',
     font:{fontSize:'68dp'},
 	textAlign:'left',
     top:'10dp',
@@ -32,10 +42,9 @@ var prefLabel = Ti.UI.createLabel({
 
 var wardLabel = Ti.UI.createLabel({
     width:'100%',
-    shadowColor:'#aaa',
     shadowOffset:{x:5,y:5},
     font:{fontSize:'68dp'},
-    color:'#000',
+    color:'#FFF',
 	textAlign:'right',
     top:'100dp',
     right: '10dp',
@@ -58,9 +67,8 @@ if(day < 10) {
 var dateLabel = Ti.UI.createLabel({
 	text: '翌朝の予想最低気温',
     width:'auto',
-    shadowColor:'#aaa',
     shadowOffset:{x:5,y:5},
-    color:'#000',
+    color:'#FFF',
     font:{fontSize:'24dp'},
 	textAlign:'left',
     top: '200dp',
@@ -69,12 +77,12 @@ var dateLabel = Ti.UI.createLabel({
 
 // 最低気温表示ラベル
 var temparatureLabel = Ti.UI.createLabel({
-	text: 'ー ℃',
-	color: '#000',
+	text: 'ー °',
+	color: '#FFF',
 	width: '100%',
     font:{fontSize:'128dp'},
 	textAlign:'right',
-    top: '230dp',
+    top: '240dp',
 });
 				
 var getLocation = function(e) {
@@ -140,7 +148,7 @@ var getLocation = function(e) {
 				function(){
 					// 成功したとき
 					 var json = eval('(' + this.responseText + ')');
-					 temparatureLabel.text = (json.forecast.temperature.min) + "℃"; // 最低気温をalert表示
+					 temparatureLabel.text = (json.forecast.temperature.min) + "°"; // 最低気温をalert表示
 				},
 				function(){
 					// 失敗したとき
@@ -200,7 +208,7 @@ var getLocation = function(e) {
 			// 再取得ボタン
 			var reloadButton = Ti.UI.createButton({
 				title: '現在地の最低気温を取得',
-				color: '#000',
+				color: '#FFF',
 			//	backgroundColor: '#77BBDD',
 				height: 'auto',
 				width: '90%',
@@ -226,7 +234,7 @@ var getLocation = function(e) {
 			freezeWindow.add(wardLabel);
 			freezeWindow.add(dateLabel);
 			freezeWindow.add(temparatureLabel);
-			freezeWindow.add(reloadButton);
+			// freezeWindow.add(reloadButton);
 			
 			
 		});
@@ -263,21 +271,21 @@ var progressBar = Ti.UI.createProgressBar({
 var loadingLabel = Ti.UI.createLabel({
 	text: '位置情報取得中',
 	width: '100%',
-    shadowColor:'#aaa',
-    shadowOffset:{x:5,y:5},
-    color:'#000',
+    // shadowColor:'#CBDFF4',
+    // shadowOffset:{x:5,y:5},
+    color:'#FFF',
     font:{fontSize:'28dp'},
 	textAlign:'center',
-    top:'175dp',
+    top:'160dp',
 });
 
 
 var appnameLabel = Ti.UI.createLabel({
-	text: 'Freeze Alarm',
+	text: 'FreezeAlarm',
 	width: '100%',
-    shadowColor:'#aaa',
+    shadowColor:'#95BEEA',
     shadowOffset:{x:5,y:5},
-    color:'#000',
+    color:'#FFF',
     font:{fontSize:'48dp'},
 	textAlign:'center',
     top:'10dp',
@@ -292,12 +300,24 @@ progressBar.show();
  * alarmWindow:「使い方」などの情報を表示
  */
 var alarmWindow = Titanium.UI.createWindow({
-    title:'アラームについて',
-    backgroundColor:'#99DDFF'
+    // title:'アラームについて',
+ 	backgroundGradient:{
+	    type: 'linear',
+		startPoint: { x: '50%', y: '0%' },
+		endPoint: { x: '50%', y: '100%' },
+		colors: [
+		  { color: '#CBDFF4', offset: 0.0},
+		  { color: '#95BEEA', offset: 0.3},
+		  { color: '#5D9DDD', offset: 1.0 }
+		]
+	}
 });
-var alarmTab = Titanium.UI.createTab({  
+alarmWindow.hideNavBar();
+
+
+var alarmTab = Titanium.UI.createTab({ 
+    title:'アラームについて', 
     icon:'KS_nav_ui.png',
-    title:'アプリについて',
     window:alarmWindow
 });
 
@@ -305,9 +325,9 @@ var alarmTab = Titanium.UI.createTab({
 var titleLabel = Ti.UI.createLabel({
 	text: 'FreezeAlarm',
     width:'95%',
-    shadowColor:'#aaa',
+    shadowColor:'#95BEEA',
     shadowOffset:{x:5,y:5},
-    color:'#000',
+    color:'#FFF',
     font:{fontSize:'32dp', fontFamily:'Helvetica Neue'},
 	textAlign:'left',
     top:'10dp',
@@ -324,7 +344,7 @@ var descLabel = Titanium.UI.createLabel({
 
 var desc2Label = Titanium.UI.createLabel({
 	color:'#555',
-	text:'アラーム時刻: 毎日20時ごろ\nアラーム基準: 0℃以下のとき',
+	text:'アラーム時刻: 毎日20時ごろ\nアラーム基準: 0以下のとき',
 	font:{fontSize:'18dp' ,fontFamily:'Helvetica Neue'},
 	textAlign:'left',
 	top: '165dp',
@@ -332,7 +352,7 @@ var desc2Label = Titanium.UI.createLabel({
 });
 
 var desc3Label = Titanium.UI.createLabel({
-	color:'#000',
+	color:'#FFF',
 	text:'Mashup',
 	font:{fontSize:'28dp' ,fontFamily:'Helvetica Neue'},
 	textAlign:'left',
@@ -350,7 +370,7 @@ var desc4Label = Titanium.UI.createLabel({
 });
 
 var authorLabel = Titanium.UI.createLabel({
-	color:'#000',
+	color:'#FFF',
 	text:'Developers',
 	font:{fontSize:'28dp' ,fontFamily:'Helvetica Neue'},
 	textAlign:'left',
@@ -367,15 +387,93 @@ var cheekitLabel = Titanium.UI.createLabel({
 	width: "85%",
 });
 
-var memberLabel = Titanium.UI.createLabel({
-	color:'#555',
-	text:'@isseium\n    API, Titanium(Android)\n@s2k1ta98\n    Titanium(Android)\n@iwate_takayu\n    Management, Titanium(iPhone)\n@whitech0c0\n    Advisor',
-	font:{fontSize:'15dp' ,fontFamily:'Helvetica Neue'},
+var memberLabel1 = Titanium.UI.createLabel({
+	color:'#fff',
+	text:'@isseium',
+	font:{fontSize:'17dp' ,fontFamily:'Helvetica Neue'},
 	textAlign:'left',
-	top: '415dp',
+	top: '420dp',
 	width: "75%",
 });
 
+var memberIntroduction1 = Titanium.UI.createLabel({
+	color:'#555',
+	text:'    API, Titanium(Android)',
+	font:{fontSize:'15dp' ,fontFamily:'Helvetica Neue'},
+	textAlign:'left',
+	top: '440dp',
+	width: "75%",
+});
+var memberLabel2 = Titanium.UI.createLabel({
+	color:'#fff',
+	text:'@s2k1ta98',
+	font:{fontSize:'17dp' ,fontFamily:'Helvetica Neue'},
+	textAlign:'left',
+	top: '470dp',
+	width: "75%",
+});
+
+var memberIntroduction2 = Titanium.UI.createLabel({
+	color:'#555',
+	text:'    Titanium(Android)',
+	font:{fontSize:'15dp' ,fontFamily:'Helvetica Neue'},
+	textAlign:'left',
+	top: '490dp',
+	width: "75%",
+});
+
+var memberLabel3 = Titanium.UI.createLabel({
+	color:'#fff',
+	text:'@iwate_takayu',
+	font:{fontSize:'17dp' ,fontFamily:'Helvetica Neue'},
+	textAlign:'left',
+	top: '520dp',
+	width: "75%",
+});
+
+var memberIntroduction3 = Titanium.UI.createLabel({
+	color:'#555',
+	text:'    Management, Titanium(iPhone)',
+	font:{fontSize:'15dp' ,fontFamily:'Helvetica Neue'},
+	textAlign:'left',
+	top: '540dp',
+	width: "75%",
+});
+
+var memberLabel4 = Titanium.UI.createLabel({
+	color:'#fff',
+	text:'@whitech0c0',
+	font:{fontSize:'17dp' ,fontFamily:'Helvetica Neue'},
+	textAlign:'left',
+	top: '570dp',
+	width: "75%",
+});
+
+var memberIntroduction4 = Titanium.UI.createLabel({
+	color:'#555',
+	text:'    Advisor',
+	font:{fontSize:'15dp' ,fontFamily:'Helvetica Neue'},
+	textAlign:'left',
+	top: '590dp',
+	width: "75%",
+});
+
+memberLabel1.addEventListener('click', function(e) {
+        //ログインのダイアログ
+	Titanium.Platform.openURL('http://twitter.com/isseium');
+ });
+memberLabel2.addEventListener('click', function(e) {
+        //ログインのダイアログ
+	Titanium.Platform.openURL('http://twitter.com/s2k1ta98');
+ });
+memberLabel3.addEventListener('click', function(e) {
+        //ログインのダイアログ
+	Titanium.Platform.openURL('http://twitter.com/iwate_takayu');
+ });
+memberLabel4.addEventListener('click', function(e) {
+        //ログインのダイアログ
+	Titanium.Platform.openURL('http://twitter.com/whitech0c0');
+ });
 
 var scrollView = Ti.UI.createScrollView({
   contentWidth: 'auto',
@@ -387,8 +485,9 @@ var scrollView = Ti.UI.createScrollView({
 });
 
 var view = Ti.UI.createView({
-    backgroundColor:'#99DDFF',
-	borderRadius: 10,
+    // backgroundColor:'#99DDFF',
+	// borderRadius: 10,
+// 　　backgroundColor : '#000',　　opacity : 0.3, visible : false,
 	top: 10,
 	height: 'auto',
 	width: '100%'
@@ -401,7 +500,15 @@ view.add(desc3Label);
 view.add(desc4Label);
 view.add(authorLabel);
 view.add(cheekitLabel);
-view.add(memberLabel);
+view.add(memberLabel1);
+view.add(memberIntroduction1);
+view.add(memberLabel2);
+view.add(memberIntroduction2);
+view.add(memberLabel3);
+view.add(memberIntroduction3);
+view.add(memberLabel4);
+view.add(memberIntroduction4);
+
 scrollView.add(view);
 alarmWindow.add(scrollView);
 
