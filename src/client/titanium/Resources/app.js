@@ -76,15 +76,26 @@ var dateLabel = Ti.UI.createLabel({
 });
 
 // 最低気温表示ラベル
-var temparatureLabel = Ti.UI.createLabel({
-	text: 'ー °',
+var temparatureLabel1 = Ti.UI.createLabel({
+	text: 'ー',
 	color: '#FFF',
 	width: '100%',
     font:{fontSize:'128dp'},
 	textAlign:'right',
     top: '240dp',
+    right: '80dp',
 });
 				
+var temparatureLabel2 = Ti.UI.createLabel({
+	text: '℃',
+	color: '#FFF',
+	width: '100%',
+    font:{fontSize:'68dp'},
+	textAlign:'right',
+    top: '295dp',
+    right: '5dp',
+});
+
 var getLocation = function(e) {
 	progressBar.value = 2;
 	
@@ -148,11 +159,15 @@ var getLocation = function(e) {
 				function(){
 					// 成功したとき
 					 var json = eval('(' + this.responseText + ')');
-					 temparatureLabel.text = (json.forecast.temperature.min) + "°"; // 最低気温をalert表示
+					 temparatureLabel1.text = (json.forecast.temperature.min); // 最低気温をalert表示
 				},
-				function(){
-					// 失敗したとき
-					alert('天気予報の取得に失敗しました．ご迷惑をおかけいたしますが，通信状態のよい環境で再度お試しください．');
+				function(e){
+				// 失敗したとき
+					if(e.error == "Bad Request"){
+						alert('翌朝の天気予報が提供されていないか，天気予報が提供されていない地域です');
+					}else{
+						alert('天気予報の取得に失敗しました．ご迷惑をおかけいたしますが，通信状態のよい環境で再度お試しください．');
+					}
 				}
 			);
 			
@@ -226,14 +241,16 @@ var getLocation = function(e) {
 			freezeWindow.remove(prefLabel);
 			freezeWindow.remove(wardLabel);
 			freezeWindow.remove(dateLabel);
-			freezeWindow.remove(temparatureLabel);
+			freezeWindow.remove(temparatureLabel1);
+			freezeWindow.remove(temparatureLabel2);
 			freezeWindow.remove(reloadButton);
 			
 			// 表示
 			freezeWindow.add(prefLabel);
 			freezeWindow.add(wardLabel);
 			freezeWindow.add(dateLabel);
-			freezeWindow.add(temparatureLabel);
+			freezeWindow.add(temparatureLabel1);
+			freezeWindow.add(temparatureLabel2);
 			// freezeWindow.add(reloadButton);
 			
 			
