@@ -9,6 +9,7 @@
  * @author Frapi <frapi@getfrapi.com>
  * @link /api/call
  */
+require_once dirname(__FILE__) . '/../Model/Call.php';
 class Action_Call extends Frapi_Action implements Frapi_Action_Interface
 {
 
@@ -105,7 +106,16 @@ class Action_Call extends Frapi_Action implements Frapi_Action_Interface
             throw $valid;
         }
         
-        return $this->toArray();
+        $request = $this->toArray();
+
+        $call = new Calls($request['tel']);
+        $call->increment();
+
+        return array(
+            "meta"      => array(
+                "status" => "true"
+            ),
+        );
     }
 
     /**
