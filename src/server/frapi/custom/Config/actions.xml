@@ -130,7 +130,6 @@ HEAD: Retrieve the meta information relative to a sibling.&#13;
    <name>Notification</name>
    <enabled>1</enabled>
    <public>1</public>
-   <description></description>
    <route>/api/notification</route>
    <hash>8c356865e02d6581e30b2ed99a81d65f72cd39a4</hash>
    <parameters>
@@ -148,6 +147,20 @@ HEAD: Retrieve the meta information relative to a sibling.&#13;
     </parameter>
     <parameter>
      <name>secret</name>
+     <required>1</required>
+    </parameter>
+   </parameters>
+  </action>
+  <action>
+   <name>Call</name>
+   <enabled>1</enabled>
+   <public>1</public>
+   <description>Count tel</description>
+   <route>/api/call</route>
+   <hash>49ffe82a61e1241d05077668e14b28a67b5bc4dd</hash>
+   <parameters>
+    <parameter>
+     <name>tel</name>
      <required>1</required>
     </parameter>
    </parameters>

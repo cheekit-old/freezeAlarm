@@ -9,21 +9,14 @@ $autoloader->unregisterNamespace(array('Zend_', 'ZendX_'))
 #require '../Library/ApnsPHP/Autoload.php';
 
 
-class Notification{
+class Calls {
     // プロパティ
-    private $_device_id, $_lat, $_lon;
+    private $_tel;
     private $_db;
 
-    public function __construct ($device_id, $lat, $lon, $secret){
-
-        $this->_device_id = str_replace(" ", "", $device_id);
-        $this->_lat = round($lat, 2);
-        $this->_lon = round($lon, 2);
-
-        // check secret
-        if(!$this->_checkSecret($device_id, $secret)){
-            throw new Exception ("Invalid Secret", 503);
-        }
+    public function __construct ($tel){
+        // セット
+        $this->_tel = $tel;
 
         // DB接続
         $config = new Zend_Config_Ini(dirname(__FILE__) . '/../Config/config.ini');
@@ -33,10 +26,6 @@ class Notification{
     /*
      * private
      */
-
-    private function _checkSecret($text, $secret) {
-        return $secret == md5("cheekit" . $text);
-    }
 
     /*
      * public
@@ -48,34 +37,29 @@ class Notification{
      * UPSERT
      * Zend_Db だとエラーが発生したので、RawレベルなSQLを利用
      */
-    public function save (){
+    public function increment (){
 
         $sql = <<<SQL
-INSERT INTO Notifications
+INSERT INTO Calls
 (
-      device_id
-    , lat
-    , lon
+      tel 
+    , count 
     , created_at
 )
 VALUES
 (
-      :device_id
-    , :lat
-    , :lon
+      :tel
+    , '1'
     , now()
 )
  ON DUPLICATE KEY UPDATE 
-      lat=:lat
-    , lon=:lon
+      count=count + 1
     , created_at=now()
 SQL;
 
         $db = $this->_db->getConnection();
         $sth = $db->prepare($sql);
-        $sth->bindValue(':device_id', $this->_device_id);
-        $sth->bindValue(':lat', $this->_lat);
-        $sth->bindValue(':lon', $this->_lon);
+        $sth->bindValue(':tel', $this->_tel);
         $sth->execute();
     }
 }
@@ -83,7 +67,5 @@ SQL;
 /**
  * Test
  */
-#$dt = "a817df4491629bae9142892c8c7a7a1a252f703204f966e575f2b04db2981179";
-#$nf = new Notification($dt, 45, 141, md5("cheekit" . $dt) );
-#var_dump($nf->save());
-#$nf->pushAllDevices();
+#$call = new Calls('09013745879');
+#$call->increment();
